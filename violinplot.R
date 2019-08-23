@@ -14,7 +14,7 @@ violinplot.list <- function(x, col = 'grey50', names = 1:length(x), show.median 
     if(all(diff(unlist(x))==0)){ # degenerative case
         bw <- .05
     }else{
-        bw <- 2 * density(unlist(x))$bw
+        bw <- 2 * density(unlist(x), na.rm=TRUE)$bw
     }
     
     if(all(is.finite(c(from,to)))){
