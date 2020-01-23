@@ -54,7 +54,18 @@ colorby <- function(x, alpha = 1, colors = NULL, diverging = FALSE, symmDiv = TR
     if(is.null(colors)){
       colors <- c(brewer.pal(5,'Set1')[4], 'white', brewer.pal(5,'Set1')[3])
     }else{
-      colors <- colors[1:3]
+      if(length(colors)%%2 == 1){
+        colset1 <- colors[1:(length(colors)/2+.5)]
+        colset2 <- colors[(length(colors)/2+.5):length(colors)]
+      }else{
+        if(length(colors)==2){
+          colset1 <- c(colors[1], 'white')
+          colset2 <- c('white', colors[2])
+        }else{
+          colset1 <- colors[1:(length(colors)/2)]
+          colset2 <- colors[(length(colors)/2+1):length(colors)]
+        }
+      }
     }
     if(length(alpha) == 1){
       alpha <- rep(alpha, length(x))
@@ -64,17 +75,17 @@ colorby <- function(x, alpha = 1, colors = NULL, diverging = FALSE, symmDiv = TR
     if(symmDiv){
       m <- max(abs(x))
       cc[which(!posind)] <- colorby(c(-m,0,x[which(!posind)]),
-                                    colors = colors[1:2],
+                                    colors = colset1,
                                     diverging = FALSE)[-c(1:2)]
       cc[which(posind)] <- colorby(c(0,m,x[which(posind)]),
-                                   colors = colors[2:3],
+                                   colors = colset2,
                                    diverging = FALSE)[-c(1:2)]
     }else{
       cc[which(!posind)] <- colorby(x[which(!posind)],
-                                    colors = colors[1:2],
+                                    colors = colset1,
                                     diverging = FALSE)
       cc[which(posind)] <- colorby(x[which(posind)],
-                                   colors = colors[2:3],
+                                   colors = colset2,
                                    diverging = FALSE)
     }
     return(alpha(cc, alpha=alpha))
