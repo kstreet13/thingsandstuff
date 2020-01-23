@@ -2,7 +2,7 @@ violinplot <- function (x, ...) {
     UseMethod("violinplot", x)
 }
 
-violinplot.list <- function(x, col = 'grey50', names = 1:length(x), show.median = TRUE, 
+violinplot.list <- function(x, col = 'grey50', names = NULL, show.median = TRUE, 
                             show.box = FALSE, box.big = 5, box.small = 2, bars = FALSE, 
                             add = FALSE, xlab='', ylab='', same.width = TRUE,
                             from = -Inf, to = Inf, col.pt = 'black', ...){
@@ -10,6 +10,13 @@ violinplot.list <- function(x, col = 'grey50', names = 1:length(x), show.median 
     col <- rep(col, length.out = length(x))
     col.pt <- rep(col.pt, length.out = length(x))
     xat <- 1:length(x)
+    if(is.null(names)){
+        if(is.null(names(x))){
+            names <- 1:length(x)
+        }else{
+            names <- names(x)
+        }
+    }
     
     if(all(diff(unlist(x))==0)){ # degenerative case
         bw <- .05
